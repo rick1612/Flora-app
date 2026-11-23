@@ -17,7 +17,7 @@ FLOWERS = {
         "summary": "Bunga potong favorit dengan kelopak berlapis rapat. Di Indonesia banyak dibudidayakan di dataran "
                    "tinggi yang sejuk seperti Cipanas, Bandungan, dan Berastagi.",
         "facts": {"Cahaya": "Matahari penuh, 6 jam+", "Air": "Sedang", "Suhu ideal": "18–26 °C",
-                  "Media": "Gembur, pH 6–6,5"},
+                  "Media": "Gembur, pH 5,6–6,5"},
         "care": {
             "Penyiraman": "Siram saat permukaan tanah mulai kering, langsung ke pangkal batang. Hindari membasahi daun "
                           "di sore hari karena memicu jamur.",
@@ -111,7 +111,7 @@ FLOWERS = {
         "color": "#B8233A",
         "summary": "Bunga klasik dengan kelopak berlapis spiral dan aroma khas. Butuh perhatian lebih, namun "
                    "berbunga sepanjang tahun di iklim tropis bila dirawat rutin.",
-        "facts": {"Cahaya": "Matahari pagi 6 jam+", "Air": "Sedang–banyak", "Suhu ideal": "18–28 °C",
+        "facts": {"Cahaya": "Matahari pagi 6 jam+", "Air": "Sedang–banyak", "Suhu ideal": "18–26 °C",
                   "Media": "Subur, pH 6–6,5"},
         "care": {
             "Penyiraman": "Siram dalam 2–3 kali seminggu di pagi hari, langsung ke tanah. Daun yang basah "
@@ -267,3 +267,49 @@ def theme_css(name: str, paper: str) -> str:
 .sprig circle {{ fill:{s2} !important; }}
 .hero-img {{ box-shadow: 0 24px 60px -24px {s1}99; }}
 </style>"""
+
+
+# ───────────── Tempat tanam yang cocok ─────────────
+# Sumber: booklet & panduan Kementan, jurnal pertanian (UNY, UGM, Unmas, Unpad), BSIP Papua, Mongabay.
+GROW = {
+    "Chrysanthemum": {
+        "intro": "Krisan adalah tanaman subtropis, jadi paling cocok di dataran tinggi yang sejuk.",
+        "Ketinggian": "700–1.200 mdpl, suhu siang 20–26 °C",
+        "Contoh daerah": "Cipanas (Cianjur), Sumowono (Semarang), Bandungan, dan dataran tinggi Sumatera Utara",
+        "Media tanam": "Tanah gembur dicampur pupuk kandang dan arang sekam, pH 5,6–6,5",
+        "Tanam di": "Bedengan di rumah plastik untuk bunga potong; krisan mini cocok di pot",
+        "lowland": "Di dataran rendah masih bisa tumbuh, tetapi bunganya lebih kecil dan butuh tempat yang teduh di siang hari.",
+    },
+    "Hibiscus": {
+        "intro": "Kembang sepatu adalah tanaman tropis yang tahan panas dan mudah tumbuh di dataran rendah.",
+        "Ketinggian": "Dataran rendah hingga menengah",
+        "Contoh daerah": "Pekarangan dan taman kota di seluruh Indonesia, termasuk daerah pesisir yang panas",
+        "Media tanam": "Tanah subur dicampur kompos, berdrainase baik dan tidak becek",
+        "Tanam di": "Tanah langsung sebagai pagar hidup, atau pot besar berlubang drainase di teras",
+        "lowland": "Justru paling betah di daerah panas; di tempat yang terlalu dingin pertumbuhannya melambat.",
+    },
+    "Marigold": {
+        "intro": "Gemitir mudah beradaptasi dan bisa ditanam dari dataran rendah sampai dataran tinggi.",
+        "Ketinggian": "Dataran rendah hingga tinggi",
+        "Contoh daerah": "Petang (Badung), Baturiti (Tabanan), Kintamani (Bangli) di Bali, dan Bandungan (Semarang)",
+        "Media tanam": "Tanah gembur dengan pupuk kandang secukupnya, porous dan tidak tergenang",
+        "Tanam di": "Bedengan di lahan terbuka, polybag, atau pot di halaman",
+        "lowland": "Bisa ditanam di dataran rendah, asalkan mendapat sinar matahari penuh dan tanahnya tidak becek.",
+    },
+    "Petuniya": {
+        "intro": "Petunia berasal dari pegunungan Amerika Selatan, sehingga paling cantik di daerah sejuk.",
+        "Ketinggian": "Ideal di atas 800 mdpl, suhu 16–22 °C",
+        "Contoh daerah": "Kawasan wisata sejuk seperti Lembang, Batu, Dieng, dan Berastagi",
+        "Media tanam": "Media ringan seperti campuran cocopeat atau gambut (peat moss) dengan kompos",
+        "Tanam di": "Pot gantung, pot balkon, atau pinggiran taman",
+        "lowland": "Tetap bisa tumbuh di dataran rendah, tetapi bunganya lebih kecil dan warnanya kurang cerah.",
+    },
+    "Rose": {
+        "intro": "Mawar tumbuh paling baik di dataran menengah hingga tinggi yang sejuk dan cerah.",
+        "Ketinggian": "Sekitar 600–1.500 mdpl, suhu 18–26 °C",
+        "Contoh daerah": "Kota Batu (Jawa Timur) dan Cihideung, Bandung Barat (Jawa Barat)",
+        "Media tanam": "Sekam dicampur pupuk kandang (1:1), atau tanah gembur dengan kompos",
+        "Tanam di": "Polybag atau pot berdiameter ±30 cm, atau bedengan di lahan terbuka",
+        "lowland": "Bisa ditanam di dataran rendah, tetapi perawatannya lebih intensif dan bunganya cenderung lebih kecil.",
+    },
+}

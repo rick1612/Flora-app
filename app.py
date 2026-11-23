@@ -11,7 +11,7 @@ import streamlit as st
 import torch
 from PIL import Image, ImageOps
 
-from flowers import FLOWERS, ORDER, THEME, illustration, photo_data_uri, theme_css
+from flowers import FLOWERS, GROW, ORDER, THEME, illustration, photo_data_uri, theme_css
 from model import count_params, grad_cam, load_checkpoint, overlay_heatmap, predict
 
 # ─────────────────────────── Konfigurasi ───────────────────────────
@@ -20,7 +20,7 @@ DEFAULT_WEIGHTS = APP_DIR / "flower_cnn.pth"
 SAMPLES_DIR = APP_DIR / "assets" / "samples"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-st.set_page_config(page_title="Flora · Pengenal Bunga", page_icon="🌸", layout="wide",
+st.set_page_config(page_title="Bloomora · Pengenal Bunga", page_icon="🌸", layout="wide",
                    initial_sidebar_state="collapsed")
 
 
@@ -66,6 +66,7 @@ NB_TEST_ACC, NB_BEST_VAL = 0.9762, 0.9905
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=block');
 
 html, body, [class*="css"], .stMarkdown, .stText, button, input, textarea, label {{
   font-family: 'Plus Jakarta Sans', sans-serif !important;
@@ -402,7 +403,7 @@ torch.save({
                          column_config={"Keyakinan": st.column_config.ProgressColumn("Keyakinan", format="%.1f%%",
                                                                                     min_value=0, max_value=100)})
             a, b, _ = st.columns([1, 1, 3])
-            a.download_button("Unduh riwayat", hdf.to_csv(index=False).encode(), "riwayat_flora.csv", "text/csv")
+            a.download_button("Unduh riwayat", hdf.to_csv(index=False).encode(), "riwayat_bloomora.csv", "text/csv")
             if b.button("Hapus riwayat"):
                 st.session_state.history = []
                 st.session_state.pop("last_logged", None)
@@ -554,6 +555,17 @@ st.markdown(f"""
 .lessons > div {{ background:white; border-radius:18px; padding:1.1rem 1.2rem; line-height:1.6; font-size:.93rem; }}
 .lessons b {{ display:block; font-family:'Fraunces',serif; font-size:1.08rem; margin-bottom:.35rem; color:{INK}; }}
 @media (max-width: 900px) {{ .lessons {{ grid-template-columns: 1fr; }} }}
+.grow {{ margin-top:2.6rem; }}
+.grow-intro {{ color:{MUTED}; max-width:68ch; margin:.2rem 0 1rem; }}
+.grow-grid {{ display:grid; grid-template-columns: repeat(2, 1fr); gap:.7rem; }}
+.grow-card {{ display:flex; gap:.9rem; align-items:flex-start; background:white; border-radius:18px; padding:1rem 1.1rem; }}
+.grow-card .material-symbols-rounded {{ font-family:'Material Symbols Rounded'; font-weight:normal; font-style:normal;
+  font-feature-settings:'liga'; -webkit-font-feature-settings:'liga'; letter-spacing:normal; text-transform:none; white-space:nowrap; font-size:1.5rem; color:var(--c); background:color-mix(in srgb, var(--c) 12%, white);
+  border-radius:12px 12px 12px 4px; padding:.35rem; line-height:1; }}
+.grow-card small {{ display:block; color:{MUTED}; font-size:.82rem; }}
+.grow-card b {{ font-weight:600; line-height:1.45; }}
+.grow-low {{ margin:.9rem 0 0; padding:.8rem 1.1rem; border-radius:14px; background:rgba(255,255,255,.6); font-size:.94rem; }}
+@media (max-width: 700px) {{ .grow-grid {{ grid-template-columns: 1fr; }} }}
 .more-h {{ font-family:'Fraunces',serif; font-size:1.4rem; margin:2.6rem 0 .8rem; }}
 @media (max-width: 700px) {{
   .care-row {{ grid-template-columns:1fr; gap:.4rem; }}
@@ -577,7 +589,7 @@ def card_html(name, small=False):
 
 def render_home():
     st.markdown('<div class="intro">Pilih bunga untuk melihat cara merawatnya</div>'
-                '<div class="lede">Lima bunga yang dikenali model Flora. Geser ke samping untuk melihat semuanya, '
+                '<div class="lede">Lima bunga yang dikenali model Bloomora. Geser ke samping untuk melihat semuanya, '
                 'lalu klik salah satu untuk membuka panduan perawatannya.</div>', unsafe_allow_html=True)
     st.markdown('<div class="strip">' + "".join(card_html(n) for n in ORDER) + "</div>", unsafe_allow_html=True)
 
@@ -612,6 +624,18 @@ def render_detail(name):
 <div class="d-latin"><i>{f['latin']}</i> &nbsp;·&nbsp; {name} &nbsp;·&nbsp; famili {f['family']}</div>
 <div class="d-sum">{f['summary']}</div>
 <div class="facts">{facts}</div></div>""", unsafe_allow_html=True)
+
+    g = GROW[name]
+    icons = {"Ketinggian": "landscape", "Contoh daerah": "location_on", "Media tanam": "grass", "Tanam di": "potted_plant"}
+    cards = "".join(
+        f'<div class="grow-card"><span class="material-symbols-rounded">{icons[k]}</span>'
+        f'<div><small>{k}</small><b>{g[k]}</b></div></div>' for k in icons)
+    st.markdown(f"""<div class="grow" style="--c:{f['color']}">
+<h2>Cocok ditanam di mana?</h2>
+<p class="grow-intro">{g['intro']}</p>
+<div class="grow-grid">{cards}</div>
+<p class="grow-low"><b>Bagaimana di dataran rendah?</b> {g['lowland']}</p>
+</div>""", unsafe_allow_html=True)
 
     care = "".join(f'<div class="care-row"><h4>{k}</h4><p>{v}</p></div>' for k, v in f["care"].items())
     st.markdown(f'<div class="care" style="--c:{f["color"]}"><h2>Saran perawatan</h2>{care}'
@@ -659,7 +683,7 @@ def _first_layer_maps(model, img, n=8):
 
 def page_howto():
     st.markdown("## Cara kerja model")
-    st.markdown('<div class="lede">Flora memakai jaringan saraf konvolusi (CNN) yang dibangun dan dilatih sendiri. '
+    st.markdown('<div class="lede">Bloomora memakai jaringan saraf konvolusi (CNN) yang dibangun dan dilatih sendiri. '
                 'Berikut perjalanan sebuah foto hingga menjadi tebakan nama bunga.</div>', unsafe_allow_html=True)
 
     steps = [
@@ -865,7 +889,7 @@ st.markdown("""<style>
 
 b, n = st.columns([1, 1.25], vertical_alignment="center")
 b.markdown(
-    '<div class="brand"><div class="logo">Flora</div><span>Katalog bunga dan cara merawatnya</span></div>'
+    '<div class="brand"><div class="logo">Bloomora</div><span>Katalog bunga dan cara merawatnya</span></div>'
     '<div class="petals" style="margin-bottom:0">' + "".join(f'<i style="background:{c}"></i>' for c in PETAL.values()) + "</div>",
     unsafe_allow_html=True)
 with n.container(horizontal=True, key="topnav"):
